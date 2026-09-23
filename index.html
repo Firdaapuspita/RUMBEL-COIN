@@ -27,7 +27,10 @@ const defaults=[
 {cat:"Penalaran Umum",q:"2, 5, 10, 17, 26, ... Angka berikutnya adalah?",o:["35","36","37","38","39"],a:2,e:"Selisihnya +3, +5, +7, +9, sehingga berikutnya +11. Jadi 26 + 11 = 37."},
 {cat:"PBM",q:"Kalimat yang paling efektif adalah...",o:["Para siswa-siswa sedang belajar.","Siswa sedang belajar di perpustakaan.","Siswa-siswa semuanya sedang belajar.","Para siswa sedang belajar-belajar.","Siswa sedang belajar di dalam perpustakaan yang berada di dalam sekolah."],a:1,e:"Kalimat kedua paling ringkas dan tidak mengandung pengulangan yang tidak perlu."},
 {cat:"PPU",q:"Kata yang paling dekat maknanya dengan 'konvensional' adalah...",o:["Modern","Lazim","Eksperimental","Kontemporer","Inovatif"],a:1,e:"Konvensional berkaitan dengan kebiasaan atau cara yang sudah lazim/umum."},
-{cat:"Pengetahuan Kuantitatif",q:"Jika 3x + 6 = 21, nilai x adalah...",o:["3","4","5","6","7"],a:2,e:"3x = 15, sehingga x = 5."}
+{cat:"Pengetahuan Kuantitatif",q:"Jika 3x + 6 = 21, nilai x adalah?",o:["3","4","5","6","7"],a:2,e:"3x = 15, sehingga x = 5."},
+{cat:"Literasi Bahasa Indonesia",q:"Makna kata 'konsisten' yang paling tepat adalah...",o:["Berubah-ubah","Tetap dan selaras","Terburu-buru","Tidak teratur","Bertentangan"],a:1,e:"Konsisten berarti tetap, selaras, atau tidak berubah-ubah dalam suatu hal."},
+{cat:"Literasi Bahasa Inggris",q:"What is the closest meaning of 'essential'?",o:["Optional","Necessary","Temporary","Difficult","Unusual"],a:1,e:"Essential means very important or necessary."},
+{cat:"Penalaran Matematika",q:"Sebuah barang seharga Rp80.000 mendapat diskon 25%. Harga setelah diskon adalah...",o:["Rp55.000","Rp60.000","Rp65.000","Rp70.000","Rp75.000"],a:1,e:"Diskon 25% dari Rp80.000 adalah Rp20.000. Jadi harga setelah diskon = Rp60.000."}
 ];
 let qs=JSON.parse(localStorage.getItem("coin_qs")||"null")||defaults;
 let settings=JSON.parse(localStorage.getItem("coin_settings")||"null")||{title:"Belajar sedikit demi sedikit, sampai siap UTBK.",desc:"Ruang belajar sederhana untuk memahami materi, latihan soal, dan mengevaluasi progresmu."};
@@ -35,7 +38,7 @@ let idx=0,done=0,right=0,best=0,answered=false;
 function save(){localStorage.setItem("coin_qs",JSON.stringify(qs));}
 function go(id){document.getElementById(id).scrollIntoView({behavior:"smooth"});}
 function renderSettings(){heroTitle.textContent=settings.title;heroDesc.textContent=settings.desc;}
-function renderCards(){cards.innerHTML=["Penalaran Umum","PBM","PPU","Pengetahuan Kuantitatif"].map((x,i)=>`<div class="card" onclick="startCat('${x}')"><div class="icon">${["🧠","📖","📚","🔢"][i]}</div><h3>${x}</h3><p>${qs.filter(q=>q.cat===x).length} soal tersedia</p></div>`).join("")}
+function renderCards(){cards.innerHTML=["Penalaran Umum","PBM","PPU","Pengetahuan Kuantitatif","Literasi Bahasa Indonesia","Literasi Bahasa Inggris","Penalaran Matematika"].map((x,i)=>`<div class="card" onclick="startCat('${x}')"><div class="icon">${["🧠","📖","📚","🔢","🇮🇩","🇬🇧","➗"][i]}</div><h3>${x}</h3><p>${qs.filter(q=>q.cat===x).length} soal tersedia</p></div>`).join("")}
 function renderQ(){if(!qs.length){question.textContent="Belum ada soal.";options.innerHTML="";return}let q=qs[idx%qs.length];cat.textContent=q.cat;count.textContent=`Soal ${(idx%qs.length)+1}/${qs.length}`;question.textContent=q.q;feedback.textContent="";next.classList.add("hidden");answered=false;options.innerHTML=q.o.map((x,i)=>`<button class="option" onclick="answerQ(${i},this)">${String.fromCharCode(65+i)}. ${x}</button>`).join("")}
 function startCat(c){let n=qs.findIndex(q=>q.cat===c);idx=n<0?0:n;go("latihan");renderQ()}
 function answerQ(i,el){if(answered)return;answered=true;done++;let q=qs[idx%qs.length],opts=document.querySelectorAll(".option");opts[q.a].classList.add("correct");if(i===q.a){right++;el.classList.add("correct");feedback.textContent="✅ Benar! "+q.e}else{el.classList.add("wrong");feedback.textContent="❌ Belum tepat. "+q.e}opts.forEach(x=>x.disabled=true);next.classList.remove("hidden");updateStats()}
