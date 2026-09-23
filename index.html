@@ -34,7 +34,7 @@ let settings=JSON.parse(localStorage.getItem("coin_settings")||"null")||{title:"
 let idx=0,done=0,right=0,best=0,answered=false;
 function save(){localStorage.setItem("coin_qs",JSON.stringify(qs));}
 function go(id){document.getElementById(id).scrollIntoView({behavior:"smooth"});}
-function renderSettings(){heroTitle.textContent=settings.title;heroDesc.textContent=settings.desc;setTitle.value=settings.title;setDesc.value=settings.desc;}
+function renderSettings(){heroTitle.textContent=settings.title;heroDesc.textContent=settings.desc;}
 function renderCards(){cards.innerHTML=["Penalaran Umum","PBM","PPU","Pengetahuan Kuantitatif"].map((x,i)=>`<div class="card" onclick="startCat('${x}')"><div class="icon">${["🧠","📖","📚","🔢"][i]}</div><h3>${x}</h3><p>${qs.filter(q=>q.cat===x).length} soal tersedia</p></div>`).join("")}
 function renderQ(){if(!qs.length){question.textContent="Belum ada soal.";options.innerHTML="";return}let q=qs[idx%qs.length];cat.textContent=q.cat;count.textContent=`Soal ${(idx%qs.length)+1}/${qs.length}`;question.textContent=q.q;feedback.textContent="";next.classList.add("hidden");answered=false;options.innerHTML=q.o.map((x,i)=>`<button class="option" onclick="answerQ(${i},this)">${String.fromCharCode(65+i)}. ${x}</button>`).join("")}
 function startCat(c){let n=qs.findIndex(q=>q.cat===c);idx=n<0?0:n;go("latihan");renderQ()}
@@ -43,10 +43,10 @@ function nextQ(){idx=(idx+1)%qs.length;renderQ()}
 function updateStats(){let p=done?Math.round(right/done*100):0;best=Math.max(best,p);document.getElementById("done").textContent=done;document.getElementById("pct").textContent=p+"%";document.getElementById("best").textContent=best+"%"}
 function saveSettings(){settings={title:setTitle.value.trim()||defaults[0].q,desc:setDesc.value.trim()};localStorage.setItem("coin_settings",JSON.stringify(settings));renderSettings();alert("Pengaturan tersimpan!")}
 function clearForm(){["editId","fQ","fA","fB","fC","fD","fE","fExp"].forEach(id=>document.getElementById(id).value="");fAns.value="0";fCat.value="Penalaran Umum"}
-function saveQuestion(){let o=[fA.value,fB.value,fC.value,fD.value,fE.value];if(!fQ.value.trim()||o.some(x=>!x.trim()))return alert("Isi pertanyaan dan semua pilihan A–E dulu.");let item={cat:fCat.value,q:fQ.value.trim(),o,a:+fAns.value,e:fExp.value.trim()};let id=editId.value;if(id==="")qs.push(item);else qs[+id]=item;save();clearForm();renderCards();renderList();renderQ();alert("Soal tersimpan!")}
+function saveQuestion(){let o=[fA.value,fB.value,fC.value,fD.value,fE.value];if(!fQ.value.trim()||o.some(x=>!x.trim()))return alert("Isi pertanyaan dan semua pilihan A–E dulu.");let item={cat:fCat.value,q:fQ.value.trim(),o,a:+fAns.value,e:fExp.value.trim()};let id=editId.value;if(id==="")qs.push(item);else qs[+id]=item;save();clearForm();renderCards();renderQ();alert("Soal tersimpan!")}
 function renderList(){questionList.innerHTML=qs.map((q,i)=>`<div class="item"><div><b>${i+1}. ${q.cat}</b><div class="small">${q.q}</div></div><div class="row"><button class="btn" onclick="editQ(${i})">Edit</button><button class="btn danger" onclick="delQ(${i})">Hapus</button></div></div>`).join("")}
 function editQ(i){let q=qs[i];editId.value=i;fCat.value=q.cat;fQ.value=q.q;[fA,fB,fC,fD,fE].forEach((el,j)=>el.value=q.o[j]);fAns.value=q.a;fExp.value=q.e;go("admin")}
-function delQ(i){if(confirm("Hapus soal ini?")){qs.splice(i,1);save();idx=0;renderCards();renderList();renderQ()}}
+function delQ(i){if(confirm("Hapus soal ini?")){qs.splice(i,1);save();idx=0;renderCards();renderQ()}}
 function resetAll(){if(confirm("Kembalikan soal dan pengaturan ke versi awal?")){localStorage.removeItem("coin_qs");localStorage.removeItem("coin_settings");location.reload()}}
 renderSettings();renderCards();renderList();renderQ();
 </script>
