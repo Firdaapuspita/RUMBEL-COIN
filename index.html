@@ -8,7 +8,7 @@
 </style>
 </head>
 <body>
-<header><div class="nav"><div class="logo">COIN <span>Rumah Belajar</span></div><nav><button onclick="go('materi')">Materi</button><button onclick="go('latihan')">Latihan</button><button onclick="go('admin')">Admin</button></nav></div></header>
+<header><div class="nav"><div class="logo">COIN <span>Rumah Belajar</span></div><nav><button onclick="go('materi')">Materi</button><button onclick="go('latihan')">Latihan</button></nav></div></header>
 
 <div class="hero"><div class="hero-in"><div class="badge">🚀 Belajar UTBK bareng COIN</div><h1 id="heroTitle"></h1><p id="heroDesc"></p><button class="btn white" onclick="go('materi')">Mulai Belajar →</button></div></div>
 
@@ -18,23 +18,7 @@
 
 <section><h2>Progress</h2><div class="stats"><div class="panel"><b id="done">0</b><span class="small">Soal dikerjakan</span></div><div class="panel"><b id="pct">0%</b><span class="small">Jawaban benar</span></div><div class="panel"><b id="best">0%</b><span class="small">Persentase terbaik</span></div></div></section>
 
-<section id="admin"><h2>✏️ Admin — Edit Isi Web</h2><p class="muted">Data tersimpan di browser ini. Untuk versi online multi-perangkat, sambungkan database saat publish.</p>
-<div class="admin"><h3>Pengaturan halaman</h3><div class="admin-grid">
-<div class="field full"><label>Judul hero</label><input id="setTitle"></div>
-<div class="field full"><label>Deskripsi hero</label><textarea id="setDesc"></textarea></div>
-</div><div class="row"><button class="btn primary" onclick="saveSettings()">Simpan Pengaturan</button><button class="btn" onclick="resetAll()">Reset Data</button></div></div>
 
-<div class="admin" style="margin-top:16px"><h3>Tambah / Edit Soal</h3><input type="hidden" id="editId">
-<div class="admin-grid">
-<div class="field"><label>Subtes</label><select id="fCat"><option>Penalaran Umum</option><option>PBM</option><option>PPU</option><option>Pengetahuan Kuantitatif</option></select></div>
-<div class="field full"><label>Pertanyaan</label><textarea id="fQ"></textarea></div>
-<div class="field"><label>A</label><input id="fA"></div><div class="field"><label>B</label><input id="fB"></div>
-<div class="field"><label>C</label><input id="fC"></div><div class="field"><label>D</label><input id="fD"></div>
-<div class="field"><label>E</label><input id="fE"></div>
-<div class="field"><label>Jawaban benar</label><select id="fAns"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option><option value="4">E</option></select></div>
-<div class="field full"><label>Pembahasan</label><textarea id="fExp"></textarea></div></div>
-<div class="row"><button class="btn primary" onclick="saveQuestion()">Simpan Soal</button><button class="btn" onclick="clearForm()">Kosongkan</button></div>
-<div class="list" id="questionList"></div></div></section>
 <footer>COIN — Rumah Belajar · Belajar, latihan, dan berkembang bersama.</footer>
 
 <script>
