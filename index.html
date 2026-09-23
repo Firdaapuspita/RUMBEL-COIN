@@ -14,8 +14,51 @@
 
 <section id="materi"><h2>Pilih Subtes</h2><p class="muted">Klik subtes untuk langsung mulai latihan.</p><div class="cards" id="cards"></div></section>
 
-<section id="latihan"><h2>Latihan Soal</h2><p class="muted">Soal yang kamu tambahkan di menu Admin akan muncul di sini.</p><div class="quiz"><div class="top"><span id="cat"></span><span id="count"></span></div><div class="q" id="question"></div><div id="options"></div><div id="feedback"></div><button class="btn primary hidden" id="next" onclick="nextQ()">Soal Berikutnya →</button></div></section>
+<section id="latihan">
+<h2>Data Peserta</h2>
+<p class="muted">Isi data berikut sebelum mulai mengerjakan latihan.</p>
 
+<div class="panel" style="max-width:780px;margin-top:20px">
+<div class="admin-grid">
+
+<div class="field">
+<label>Nama Lengkap</label>
+<input id="namaPeserta" type="text" placeholder="Masukkan nama kamu">
+</div>
+
+<div class="field">
+<label>Asal Sekolah/Universitas</label>
+<input id="asalPeserta" type="text" placeholder="Contoh: UIN Jakarta">
+</div>
+
+<div class="field">
+<label>Kelas</label>
+<input id="kelasPeserta" type="text" placeholder="Contoh: 12 IPA 1">
+</div>
+
+<div class="field">
+<label>Email <span class="small">(opsional)</span></label>
+<input id="emailPeserta" type="email" placeholder="Masukkan email">
+</div>
+
+</div>
+
+<div class="row">
+<button class="btn primary" onclick="mulaiLatihan()">Mulai Latihan →</button>
+</div>
+</div>
+
+<div id="quizArea" class="hidden">
+<div class="quiz">
+<div class="top"><span id="cat"></span><span id="count"></span></div>
+<div class="q" id="question"></div>
+<div id="options"></div>
+<div id="feedback"></div>
+<button class="btn primary hidden" id="next" onclick="nextQ()">Soal Berikutnya →</button>
+</div>
+</div>
+
+</section>
 <section><h2>Progress</h2><div class="stats"><div class="panel"><b id="done">0</b><span class="small">Soal dikerjakan</span></div><div class="panel"><b id="pct">0%</b><span class="small">Jawaban benar</span></div><div class="panel"><b id="best">0%</b><span class="small">Persentase terbaik</span></div></div></section>
 
 
@@ -40,7 +83,13 @@ function go(id){document.getElementById(id).scrollIntoView({behavior:"smooth"});
 function renderSettings(){heroTitle.textContent=settings.title;heroDesc.textContent=settings.desc;}
 function renderCards(){cards.innerHTML=["Penalaran Umum","PBM","PPU","Pengetahuan Kuantitatif","Literasi Bahasa Indonesia","Literasi Bahasa Inggris","Penalaran Matematika"].map((x,i)=>`<div class="card" onclick="startCat('${x}')"><div class="icon">${["🧠","📖","📚","🔢","🇮🇩","🇬🇧","➗"][i]}</div><h3>${x}</h3><p>${qs.filter(q=>q.cat===x).length} soal tersedia</p></div>`).join("")}
 function renderQ(){if(!qs.length){question.textContent="Belum ada soal.";options.innerHTML="";return}let q=qs[idx%qs.length];cat.textContent=q.cat;count.textContent=`Soal ${(idx%qs.length)+1}/${qs.length}`;question.textContent=q.q;feedback.textContent="";next.classList.add("hidden");answered=false;options.innerHTML=q.o.map((x,i)=>`<button class="option" onclick="answerQ(${i},this)">${String.fromCharCode(65+i)}. ${x}</button>`).join("")}
-function startCat(c){let n=qs.findIndex(q=>q.cat===c);idx=n<0?0:n;go("latihan");renderQ()}
+let selectedCat="";
+
+function startCat(c){
+selectedCat=c;
+document.getElementById("quizArea").classList.add("hidden");
+go("latihan");
+}
 function answerQ(i,el){if(answered)return;answered=true;done++;let q=qs[idx%qs.length],opts=document.querySelectorAll(".option");opts[q.a].classList.add("correct");if(i===q.a){right++;el.classList.add("correct");feedback.textContent="✅ Benar! "+q.e}else{el.classList.add("wrong");feedback.textContent="❌ Belum tepat. "+q.e}opts.forEach(x=>x.disabled=true);next.classList.remove("hidden");updateStats()}
 function nextQ(){idx=(idx+1)%qs.length;renderQ()}
 function updateStats(){let p=done?Math.round(right/done*100):0;best=Math.max(best,p);document.getElementById("done").textContent=done;document.getElementById("pct").textContent=p+"%";document.getElementById("best").textContent=best+"%"}
