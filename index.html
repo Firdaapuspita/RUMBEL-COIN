@@ -89,6 +89,21 @@ function startCat(c){
 selectedCat=c;
 document.getElementById("quizArea").classList.add("hidden");
 go("latihan");
+} function mulaiLatihan(){
+let nama=document.getElementById("namaPeserta").value.trim();
+let asal=document.getElementById("asalPeserta").value.trim();
+let kelas=document.getElementById("kelasPeserta").value.trim();
+
+if(!nama||!asal||!kelas){
+alert("Nama, asal sekolah/universitas, dan kelas wajib diisi.");
+return;
+}
+
+let n=qs.findIndex(q=>q.cat===selectedCat);
+idx=n<0?0:n;
+
+document.getElementById("quizArea").classList.remove("hidden");
+renderQ();
 }
 function answerQ(i,el){if(answered)return;answered=true;done++;let q=qs[idx%qs.length],opts=document.querySelectorAll(".option");opts[q.a].classList.add("correct");if(i===q.a){right++;el.classList.add("correct");feedback.textContent="✅ Benar! "+q.e}else{el.classList.add("wrong");feedback.textContent="❌ Belum tepat. "+q.e}opts.forEach(x=>x.disabled=true);next.classList.remove("hidden");updateStats()}
 function nextQ(){idx=(idx+1)%qs.length;renderQ()}
@@ -100,6 +115,6 @@ function renderList(){questionList.innerHTML=qs.map((q,i)=>`<div class="item"><d
 function editQ(i){let q=qs[i];editId.value=i;fCat.value=q.cat;fQ.value=q.q;[fA,fB,fC,fD,fE].forEach((el,j)=>el.value=q.o[j]);fAns.value=q.a;fExp.value=q.e;go("admin")}
 function delQ(i){if(confirm("Hapus soal ini?")){qs.splice(i,1);save();idx=0;renderCards();renderQ()}}
 function resetAll(){if(confirm("Kembalikan soal dan pengaturan ke versi awal?")){localStorage.removeItem("coin_qs");localStorage.removeItem("coin_settings");location.reload()}}
-renderSettings();renderCards();renderList();renderQ();
+renderSettings();renderCards();renderQ();
 </script>
 </body></html>
